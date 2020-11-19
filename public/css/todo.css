@@ -1,0 +1,19 @@
+.list-group-item form.form-delete {
+	float: right;
+}
+
+.list-group-item form.form-status {
+	display: inline;
+}
+
+.list-group-item form.form-status button {
+	padding: 0;
+}
+
+.list-group-item:hover {
+	background-color: aliceblue;
+}
+.glyphicon {
+	font-size: 1.4em;
+	vertical-align: text-bottom;
+}

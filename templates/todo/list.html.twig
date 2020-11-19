@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des tâches - {{ parent() }}{% endblock %}
+
+{% block body %}
+
+<h2>Liste des tâches</h2>
+
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<ul class="list-group">
+
+    {% for key, todo in todos %}
+
+    <li class="list-group-item">
+
+        <!-- TODO: delete-->
+        <form action="{{ path("todo_delete", {"id": key}) }}" method="post" class="form-delete">
+            <input type="hidden" name="_method" value="delete">
+            <button class="btn btn-xs btn-link" type="submit" name="delete"><span class="glyphicon glyphicon-remove"></span></button>
+        </form>
+
+        <span>
+            {% if todo.status == 'done' %}
+                {% set newStatus = 'undone' %}
+                {% set icon = 'check' %}
+            {% else %}
+                {% set newStatus = 'done' %}
+                {% set icon = 'unchecked' %}
+            {% endif %}
+            <form action="{{ path('todo_set_status', { 'id' : key, 'status' : newStatus }) }}" method="post" class="form-status">
+                <button class="btn btn-link" type="submit"><span class="glyphicon glyphicon-{{ icon }}"></span></button>
+            </form>
+
+            <!-- lien vers tâche -->
+            <a href="{{ path('todo_show', { 'id' : key }) }}">
+                {% if todo.status == 'done' %}
+                <!-- tâche effectuée -->
+                <s>{{ todo.task }}</s>
+                {% else %}
+                <!-- tâche non effectuée -->
+                {{ todo.task }}
+                {% endif %}
+            </a>
+        </span>
+    </li>
+    {% endfor %}
+</ul>
+
+{% include "_form_add.html.twig" %}
+
+<hr>
+{% if app.environment == "dev" %}
+    <a href="{{ path('todo_dev_reset') }}" class="text-danger">Réinitialiser les tâches (dev)</a>
+{% endif %}
+
+{% endblock %}
